@@ -1,0 +1,76 @@
+基本介绍：
+	Fetch对Request和Response以及一些相关的概念像CORS及http的一些请求头提供了一般的定义，
+	FetchApi提供了一个简单的javascript接口去操作http的reponse和request对象，也提供fetch()全局方法异步获取服务器资源。
+	Fetch对XMLHttpRequest的功能提供了一个更好的替代，比XMLHttpRequest更底层，并且可以被其他技术使用（像ServiceWorker）。
+	有以下两个主要的特点需要记住：
+		1.默认不会发送和接收cookies，因此，如果服务器是通过cookies来维持session的话（像java,默认会有JSESSIONID）会失败，当然也可以设置
+	发送cookies,稍后解释。
+		2.fetch()返回的是Promise对象（比较旧的浏览器可以使用babel-polyfill,查看使用方法），不论返回状态码404或500，Promise都会正常解析，除非是像网络等其他任何可以
+	阻止获取返回结果的原因，才会reject;
+	目前浏览器的支持不是很好，可以使用whatwg-fetch兼容；
+	
+相关接口或方法：	
+Promise<Response> fetch(input[, init]):
+	input : 一个请求路径或一个Request对象，是必须要传的；
+	init : 一个对象，可以不传，对请求进行自定义设置，具体参数如下：
+		{
+			method : 请求方法，如GET,POST.
+			headers : 任何http请求头.
+			body : http的请求体.
+			mode : 请求模式，列如：cors,no-cors,same-origin.
+			cache : 请求使用的缓存模式 ，列如: default, no-store, reload, no-cache, force-cache, 或 only-if-cached.
+			credentials: 请求使用的凭证，可以是 omit, same-origin, 或 include等。如果要自动发送cookies，这个字段必须设置。
+    			redirect: 重定向模式: follow (自动跟随重定向), error (如果有一个重定向出现，将放弃并报错), 或 manual (手动处理重定向). 
+    			referrer: 可以是  no-referrer, client, 或 URL. 默认是 client.
+    			referrerPolicy: 指定请求头中的Referer可以设置什么值或不发送. 可以是no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, unsafe-url中的一个.
+    			integrity: 跟据提供的值对请求资源进行完整性校验(e.g., sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=)，稍后提供更多解释.
+    			signal: 一个 AbortSignal 对象实例; 允许和请求对象交互并通过 AbortController 取消请求.
+			}
+			credentials : 可以用于指示是否发送cookies，
+			integrity : 例如，当使用CDN去存放脚本和样式表时，可以提高站点性能和节约带宽。然而，这也会有一些风险，如果一个攻击者控制了CDN,那么他可以注入任何恶意代码
+			或者替换整个脚本文件，而使站点遭受攻击。为了保证获取的资源没有被篡改，我们可以使用integrity去设置一个base64编码的资源哈希摘要。
+				例如，script 的使用方式如下（link也类同） : 
+					<script src="https://example.com/framework.js"
+        				integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
+        				crossorigin="anonymous"></script>
+        	openssl生成哈希的方式如下：
+        		cat FILENAME.js | openssl dgst -sha384 -binary | openssl enc -base64 -A 
+			这个地址（https://srihash.org/ ）也可以在线生成哈希。
+		signal ：一个 AbortSignal 对象实例，可以把它关联的到一个fetch请求，这样可以就可根据需要用AbortController的abort()取消fetch请求。
+			例如 ，下载一个视频：
+				var controller = new AbortController();
+				var signal = controller.signal; //获取AbortSignal实例
+
+				var startDownloadBtn = document.querySelector('.startDownload'); //开始下载按钮
+				var abortDownloadBtn = document.querySelector('.abortDownload'); //放弃下载按钮
+
+				startDownloadBtn.addEventListener('click', fetchVideo); //绑定事件
+
+				abortBtn.addEventListener('click', function() {
+  					controller.abort();
+  					console.log('放弃下载！');
+				});
+
+				function fetchVideo() {
+  					fetch(url, {signal}).then(function(response) {
+    					// to do something
+  					}).catch(function(e) {
+    					reports.textContent = '下载出错了: ' + e.message;
+  					});
+				}
+  			keepalive: 
+window.addEventListener("unload", logData, false);
+
+function logData() {
+  navigator.sendBeacon("/log", analyticsData);
+}
+
+The keepalive option can be used to allow the request to outlive the page. 
+Fetch with the keepalive flag is a replacement for the Navigator.sendBeacon() API. 
+  
+
+
+    
+
+	
+		

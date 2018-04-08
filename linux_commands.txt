@@ -1,0 +1,26 @@
+find 查找目录及其子目录下的所有文件和文件夹
+find -name *.sh 查找以当前目录下的所有以.sh结尾的文件 -iname忽视大写写
+grep
+netstat -apn | grep 80 netstat   -nultp查看所有已使用的端口号
+lsof
+ps -aux 
+isof 
+tail
+head
+cat 
+tac
+rm 
+mkdir
+ll
+ls -a
+./config
+make config
+install
+echo 
+printf
+chmod
+kill
+vim
+tar -xzvf  .tar.gz  没有gz就不能用-z
+xz -d .xz
+
