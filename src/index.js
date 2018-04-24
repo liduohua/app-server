@@ -8,12 +8,12 @@ const error = require('koa-json-error');
 const cors = require('./middleware/cors');
 const routes = require('./routes');
 const {resolve} = require('path');
-const redis  = require('ioredis');
+const Redis  = require('ioredis');
 const ratelimit = require('koa-ratelimit')
 const logger = require('./logs');
 var app = new Koa();
-
-/*app.use(
+app.context.db = new Redis(config.redisPost,config.redisHost);
+app.use(
 	ratelimit({
 		db: new redis(),
 		duration: 60000,
@@ -26,7 +26,7 @@ var app = new Koa();
 		},
 		max: 100,
 	})
-)*/
+)
 
 // 记录成功处理的请求
 app.use(async (ctx, next) => {
