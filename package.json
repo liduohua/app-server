@@ -6,7 +6,7 @@
   "dependencies": {
     "ioredis": "^3.2.2",
     "jsonwebtoken": "^8.1.1",
-    "koa": "^2.4.1",
+    "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-json-error": "^3.1.2",
     "koa-ratelimit": "^4.0.0",
@@ -15,11 +15,14 @@
     "koa-send": "^4.1.2",
     "log4js": "^2.5.3",
     "mysql": "^2.15.0",
+    "node-uuid": "^1.4.8",
     "pm2": "^2.10.1",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
-    "nodemon": "^1.17.1"
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.1",
+    "supertest": "^3.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
