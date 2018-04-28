@@ -1,6 +1,6 @@
 //https://github.com/mysqljs/mysql
 const Koa = require('koa');
-const socket = require('./socket');
+
 const config = require('../src/config');
 const send =  require('koa-send');
 const bodyParser = require('koa-bodyparser');
@@ -8,12 +8,13 @@ const error = require('koa-json-error');
 const cors = require('./middleware/cors');
 const routes = require('./routes');
 const {resolve} = require('path');
-const Redis  = require('ioredis');
+
 const ratelimit = require('koa-ratelimit')
 const logger = require('./logs');
 var app = new Koa();
-app.context.db = new Redis(config.redisPost,config.redisHost);
-app.use(
+
+
+/*app.use(
 	ratelimit({
 		db: new redis(),
 		duration: 60000,
@@ -26,7 +27,7 @@ app.use(
 		},
 		max: 100,
 	})
-)
+)*/
 
 // 记录成功处理的请求
 app.use(async (ctx, next) => {
@@ -82,13 +83,7 @@ app.use(bodyParser({enableTypes : ['json']}));
 // 路由处理
 app.use(routes);
 
-
-var server = require('http').createServer(app.callback());
-
-// 启动消息推送
-socket(server);
-
-module.exports = server;
+module.exports = app;
 
 
 

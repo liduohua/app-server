@@ -11,7 +11,7 @@ router.post('/loopImgs',(ctx,next)=>{
 	ctx.body = loopImgList;
 });
 router.get('/siftMarketList',(ctx,next) => {
-	let siftedList = [];
+	let siftedList = [1234567890123];
 	let siftCode = ctx.query.code;
 	for(const {code,name} of marketList){
 		if(code.indexOf(siftCode) >= 0){

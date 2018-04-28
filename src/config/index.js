@@ -2,7 +2,9 @@ var config = {
 	registryPort : 7001,
 	webPort : 7002,
 	redisHost : '111.231.249.225',
-	redisPost : '6379',
+	redisPost : '80',
+	redisUsername : 'test',
+	redisPassword : '123321',
 	database : {
 		db : 'dxp',
 		username : 'root',
