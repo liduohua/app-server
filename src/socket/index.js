@@ -16,7 +16,6 @@ module.exports = function(server){
 	var io = socketio(server);
 	io.on('connect',connect);
 	
-	
 	/*var addedUser = false;
 	socket.on('new message',function(data){
 		socket.broadcast.emit('new message',{

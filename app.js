@@ -8,10 +8,18 @@ const server = http.createServer();
 // 启动消息推送
 socket(server, redis);
 app.context.redis = redis;
-server.on('request',app.callback());
+server.on('request',(request,response) => {
+	//socket.io的请求不能被koa处理
+	if(request.url.indexOf('socket.io') > -1){
+		return;
+	}
+	app.callback()(request,response);
+});
 
-app.listen(config.webPort,()=>{
+server.listen(config.webPort,()=>{
 	console.log('Server listening at port %d',config.webPort);
 });
 
 module.exports = server;
+
+

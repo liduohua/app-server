@@ -6,9 +6,9 @@ const send =  require('koa-send');
 const bodyParser = require('koa-bodyparser');
 const error = require('koa-json-error');
 const cors = require('./middleware/cors');
-const routes = require('./routes');
+const routers = require('./routes');
 const {resolve} = require('path');
-
+const authInterceptor = require('./middleware/authInterceptor');
 const ratelimit = require('koa-ratelimit')
 const logger = require('./logs');
 var app = new Koa();
@@ -28,7 +28,6 @@ var app = new Koa();
 		max: 100,
 	})
 )*/
-
 // 记录成功处理的请求
 app.use(async (ctx, next) => {
 	try {
@@ -76,12 +75,13 @@ app.use(async (ctx, next) => {
 
 // 跨域处理
 app.use(cors);
-
+app.use(authInterceptor);
 // body解析
 app.use(bodyParser({enableTypes : ['json']}));
-
 // 路由处理
-app.use(routes);
+for(router of routers){
+	app.use(router.routes());
+}
 
 module.exports = app;
 
