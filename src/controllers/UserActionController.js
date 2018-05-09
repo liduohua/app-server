@@ -3,7 +3,20 @@ class UserController {
 	async authenticateByUserName(ctx) {
 		let userName = ctx.request.body.userName;
 		let password = ctx.request.body.password;
+		let tokenId = ctx.request.body.tokenId;
+		let checkCode = ctx.request.body.checkCode;
 		var userInfo;
+		let result = await ctx.redis.get('code:'+tokenId);
+		console.log(result);
+		if(result !== checkCode){
+			userInfo = {
+				error_no : '9998',
+				error_info : '验证码错误'
+			}
+			ctx.body = userInfo;
+			return;
+		}
+		console.log();
 		if(userName === 'qwer' && password === '123456'){
 			userInfo = {
 				userName : 'qwer',
@@ -46,10 +59,17 @@ class UserController {
 	
 	async getRandomCode(ctx) {
 		var tokenId = uuidv4();
-		ctx.body = {
-			tokenId ,
-			src : 'http://232/sd.jpeg'
+		
+		let result = await ctx.redis.set('code:'+tokenId,1111,'EX',300);
+		if(result === 'OK'){
+			ctx.body = {
+				tokenId ,
+				src : 'http://232/sd.jpeg'
+			}
+		}else{
+			
 		}
+		
 	}
 }
 

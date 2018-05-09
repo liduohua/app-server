@@ -18,24 +18,29 @@ module.exports = async function(ctx, next){
 		//user
 		'300001',
 		'300002',
-		'randomCode',
+		//'randomCode',
 		'300005',
 		'300004'
-	];
+	 ];
+	 
+	
 	console.log(ctx.req.url);
-	if(needAuthRoutes.indexOf(ctx.req.url.splice(1)) > -1){
+	let url = ctx.req.url;
+	let endIndex = url.indexOf('?') === -1 ? url.length : url.indexOf('?');
+	if(needAuthRoutes.indexOf(url.slice(1,endIndex)) > -1){
 		ctx.tokenId ;
 		let expiredTime = 4320000;//3天
-		let refreshTime = tokenRefreshTime.get(ctx.tokenId);
-		if(Date.now() - refreshTime < expiredTime){
-			tokenRefreshTime.set(ctx.tokenId, Date.now())
-		}else{
-			
-		}
+		//let refreshTime = tokenRefreshTime.get(ctx.tokenId);
+		//if(Date.now() - refreshTime < expiredTime){
+		//	tokenRefreshTime.set(ctx.tokenId, Date.now())
+		//}else{
+		//	
+		//}
 		//key = 'user:tokenId'
 		//key = 'fund:tokenId'
 		var val = await ctx.redis.get('user:tokenId');
-		if(val){
+		console.log(typeof val);
+		if(!val){
 			ctx.body = {
 				error_no : '9999',
 				error_info : '登录时间过期！'
@@ -44,6 +49,7 @@ module.exports = async function(ctx, next){
 		}else{
 			//刷新时间
 		}
+		console.log(url.slice(1,url.indexOf('?')));
 		await next();
 	}else{
 		await next();

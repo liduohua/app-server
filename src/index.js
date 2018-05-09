@@ -75,7 +75,7 @@ app.use(async (ctx, next) => {
 
 // 跨域处理
 app.use(cors);
-app.use(authInterceptor);
+//app.use(authInterceptor);
 // body解析
 app.use(bodyParser({enableTypes : ['json']}));
 // 路由处理

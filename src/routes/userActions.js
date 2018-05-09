@@ -5,18 +5,18 @@ let userController = new UserController();
 /*
  * 用名密码登录
  */
-router.post('/300001',(ctx,next)=>{
-	userController.authenticateByUserName(ctx);
+router.post('/300001',async (ctx,next)=>{
+	await userController.authenticateByUserName(ctx);
 });
 /*
  * 手机号登录
  */
-router.post('/300002',(ctx,next)=>{
-	userController.authenticateByPhone(ctx);
+router.post('/300002',async (ctx,next)=>{
+	await userController.authenticateByPhone(ctx);
 });
 
-router.post('/randomCode',(ctx, next) => {
-	userController.getRandomCode(ctx);
+router.post('/randomCode',async (ctx, next) => {
+	await userController.getRandomCode(ctx);
 });
 router.get('/300005',(ctx, next) => {
 	ctx.body = [
