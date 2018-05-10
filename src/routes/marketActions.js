@@ -61,3 +61,5 @@ router.get('/400002',(ctx,next) => {
 	ctx.body = marketList
 	
 });
+
+module.exports = router;

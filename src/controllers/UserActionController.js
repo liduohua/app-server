@@ -82,10 +82,14 @@ class UserController {
 	 * 退出登录
 	 */
 	async signOut(ctx) {
+		console.log(1234567);
 		let tokenId = ctx.request.body.tokenId;
-		let result = await ctx.redis.del(tokenId);
-		if(result === 'OK'){
-			ctx.redis.pub('user:signout',tokenId);
+		
+		let result = await ctx.redis.del('code:'+tokenId);
+		
+		
+		if(result === 1){
+			ctx.redis.publish('user:signout',tokenId);
 			ctx.body = {
 				error_info : '退出成功',
 				error_no : '0'

@@ -19,7 +19,7 @@ router.post('/randomCode',async (ctx, next) => {
 	await userController.getRandomCode(ctx);
 });
 //退出
-router.post('/signout', async (ctx ,next) => {
+router.post('/signOut', async (ctx ,next) => {
 	await userController.signOut(ctx);
 });
 router.get('/300005',(ctx, next) => {
@@ -315,7 +315,7 @@ router.get('/300004',(ctx, next) => {
 			tradedAmount : 0,
 			entrustNo : '343243',
 			status : '已报',
-		}
+		} 
 	]
 });
 module.exports = router;
