@@ -1,5 +1,8 @@
 const uuidv4 = require('uuid/v4');
 class UserController {
+	/*
+	 * 用户名密码登录
+	 */
 	async authenticateByUserName(ctx) {
 		let userName = ctx.request.body.userName;
 		let password = ctx.request.body.password;
@@ -34,6 +37,9 @@ class UserController {
 		}
 		ctx.body = userInfo;
 	}
+	/*
+	 * 手机验证码登录
+	 */
 	async authenticateByPhone(ctx) {
 		let phoneNo = ctx.request.body.phoneNo;
 		let phoneCheckCode = ctx.request.body.phoneCheckCode;
@@ -56,7 +62,9 @@ class UserController {
 		}
 		ctx.body = userInfo;
 	}
-	
+	/*
+	 * 生成验证码
+	 */
 	async getRandomCode(ctx) {
 		var tokenId = uuidv4();
 		
@@ -69,8 +77,24 @@ class UserController {
 		}else{
 			
 		}
-		
+	}
+	/*
+	 * 退出登录
+	 */
+	async signOut(ctx) {
+		let tokenId = ctx.request.body.tokenId;
+		let result = await ctx.redis.del(tokenId);
+		if(result === 'OK'){
+			ctx.redis.pub('user:signout',tokenId);
+			ctx.body = {
+				error_info : '退出成功',
+				error_no : '0'
+			}
+		}
 	}
 }
 
 module.exports =  UserController;
+
+
+

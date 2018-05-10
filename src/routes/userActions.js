@@ -14,9 +14,13 @@ router.post('/300001',async (ctx,next)=>{
 router.post('/300002',async (ctx,next)=>{
 	await userController.authenticateByPhone(ctx);
 });
-
+//获取验证码
 router.post('/randomCode',async (ctx, next) => {
 	await userController.getRandomCode(ctx);
+});
+//退出
+router.post('/signout', async (ctx ,next) => {
+	await userController.signOut(ctx);
 });
 router.get('/300005',(ctx, next) => {
 	ctx.body = [

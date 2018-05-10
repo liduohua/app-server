@@ -19,6 +19,7 @@ module.exports = async function(ctx, next){
 		'300001',
 		'300002',
 		//'randomCode',
+		'signout',
 		'300005',
 		'300004'
 	 ];

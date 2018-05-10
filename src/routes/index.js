@@ -1,4 +1,12 @@
 const userActionsRouter = require('./userActions');
-const personCenterRouter = require('./personCenter');
-const a = require('./index1');
-module.exports = [a,userActionsRouter,userActionsRouter];
+const personCenterRouter = require('./personCenterActions');
+const newsActionRouter = require('./newsActions');
+const advImgActionRouter = require('./advImgActions');
+const marketActionRouter = require('./marketActions');
+module.exports = [
+	userActionsRouter,
+	userActionsRouter,
+	newsActionRouter,
+	advImgActionRouter,
+	marketActionRouter
+];
