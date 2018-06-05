@@ -53,6 +53,8 @@ let errorOptions = {
 		}
 	}
 }
+
+
 app.use(error(errorOptions))
 
 // 返回响应时间

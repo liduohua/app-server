@@ -1,19 +1,56 @@
 //直接推送行情列表数据
 const socketio = require('socket.io');
+const Namespace = require('socket.io/lib/namespace');
+
 const marketList = require('./marketList');
-let numUsers = 0;
+let io ;
+let conns = 0;
 function connect(socket){
-	numUsers++;
-	console.log(numUsers);
-	socket.emit('marketlist',marketList)
+	conns++;
+	console.log("连接数："+conns);
+	socket.emit('marketList',marketList)
+	socket.on('subscrible',subscrible); //订阅
+	socket.on('update',update); //更新订阅
+	socket.on('cancelSubscrible',cancel); //取消订阅
 	socket.on('disconnect',disconnect);
+	
 }
-function disconnect(){
-	numUsers--;
-	console.log('------------');
+function update(newCodes,oldCodes,fn){
+	newCodes = [].concat(newCodes);
+	this.join(codes);
+	oldCodes = [].concat(oldCodes);
+	oldCodes.forEach((code)=>{
+		this.leave(code);
+	});
+	
 }
-module.exports = function(server){
-	var io = socketio(server);
+function cancel(codes,fn){
+	codes = [].concat(codes);
+	codes.forEach((code) => {
+		this.leave(code);
+	})
+}
+function subscrible(codes,fn){
+	if(typeof codes === 'function'){
+		fn = codes;
+		return fn('订阅代码不能为空！');
+	}
+	codes = [].concat(codes);
+	this.join(codes); 
+	this.emit('test',12)
+}
+function disconnect(reason){
+	conns--;
+	console.log(reason);
+	//此处应该更新redis
+}
+setInterval(function(){
+	
+	//io.to('11').emit('test','haha')
+	
+},1000)
+module.exports = function(server,redis){
+	io = socketio(server);
 	io.on('connect',connect);
 	
 	/*var addedUser = false;
@@ -22,8 +59,9 @@ module.exports = function(server){
 			username : socket.username,
 			message : data
 		})
-	})
-	
+	}) 
+
+
 	socket.on('add user',function(username){
 		if(addedUser) return;
 		socket.username = username;

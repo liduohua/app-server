@@ -38,6 +38,7 @@ redis.on('ready' ,()=>{
 	server.listen(config.webPort,()=>{
 		console.log('Server listening at port %d',config.webPort);
 	});
+	socket(server, redis);
 });
 subRedis.on('ready',()=>{
 	//订阅'user:signout'
@@ -52,7 +53,7 @@ subRedis.on('ready',()=>{
 	subRedis.on('message',function(channel, message){
 		console.log(channel+'   '+message);
 	});
-	socket(server, redis);
+	
 })
 
 module.exports = server;
