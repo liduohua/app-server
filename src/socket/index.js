@@ -1,7 +1,6 @@
 //直接推送行情列表数据
 const socketio = require('socket.io');
 const Namespace = require('socket.io/lib/namespace');
-
 const marketList = require('./marketList');
 let io ;
 let conns = 0;
@@ -13,7 +12,6 @@ function connect(socket){
 	socket.on('update',update); //更新订阅
 	socket.on('cancelSubscrible',cancel); //取消订阅
 	socket.on('disconnect',disconnect);
-	
 }
 function update(newCodes,oldCodes,fn){
 	newCodes = [].concat(newCodes);
@@ -44,59 +42,33 @@ function disconnect(reason){
 	console.log(reason);
 	//此处应该更新redis
 }
-setInterval(function(){
-	
-	//io.to('11').emit('test','haha')
-	
-},1000)
-module.exports = function(server,redis){
-	io = socketio(server);
-	io.on('connect',connect);
-	
-	/*var addedUser = false;
-	socket.on('new message',function(data){
-		socket.broadcast.emit('new message',{
-			username : socket.username,
-			message : data
-		})
-	}) 
 
-
-	socket.on('add user',function(username){
-		if(addedUser) return;
-		socket.username = username;
-		++numUsers;
-		addedUser = true;
-		socket.emit('login',{
-			numUsers : numUsers
-		})
-		socket.broadcast.emit('user joined',{
-			username : socket.username,
-			numUsers :numUsers
-		})
-	})
-
-	socket.on('typing',function(){
-		socket.broadcast.emit('typing',{
-			username : socket.username
-		})
-	})
-
-	socket.on('stop typing',function(){
-		socket.broadcast.emit('stop typing',{
-			username : socket.username
-		})
-	})
-
-	socket.on('disconnect',function(){
-		if(addedUser){
-			--numUsers;
-		
-			socket.broadcast.emit('user left',{
-				username : socket.username,
-				numUsers: numUsers
-			})
-		}
-	})*/
-	
+//如果行情服务器发布了行情列表更新
+function marketListUpdate(channel,message){
+	if(channel === 'market:listupdate'){
+		//将行情列表更改已相应的代码为单位广播到相应的房间
+		io.to('11').to('22').emit('test','haha');
+		let marketList = JSON.parse(message);
+		marketList.forEach((item) => {
+			io.of('market')
+		});
+	}
 }
+module.exports = function(server,subRedis){
+	io = socketio(server);
+	io.of('market').on('connect',connect);
+	//订阅'user:signout'
+	subRedis.subscribe('market:listupdate',function(err,count){
+		if(err){
+			console.log('market:listupdate subscribing failed'); 
+		}else{
+			console.log('has subscribed "market:listupdate" channel.'); 
+		}
+	});
+	subRedis.on('message',marketListUpdate);
+	
+	subRedis.hmset('socket:server:addr',{})
+}
+
+
+

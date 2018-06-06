@@ -38,8 +38,9 @@ redis.on('ready' ,()=>{
 	server.listen(config.webPort,()=>{
 		console.log('Server listening at port %d',config.webPort);
 	});
-	socket(server, redis);
+	
 });
+//订阅redis实例
 subRedis.on('ready',()=>{
 	//订阅'user:signout'
 	subRedis.subscribe('user:signout',function(err,count){
@@ -48,12 +49,11 @@ subRedis.on('ready',()=>{
 		}else{
 			console.log('has subscribed "user:signout" channel.'); 
 		}
-		
 	});
 	subRedis.on('message',function(channel, message){
 		console.log(channel+'   '+message);
 	});
-	
+	socket(server, subRedis);
 })
 
 module.exports = server;
